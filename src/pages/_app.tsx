@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { Geist, Geist_Mono } from "next/font/google";
 import { useMemo, useEffect, useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,19 +17,20 @@ const geistMono = Geist_Mono({
 });
 
 const navigation = [
-  { label: "Dashboard", href: "/" },
-  { label: "Schedule", href: "/schedule" },
-  { label: "Availability", href: "/availability" },
-  { label: "Map", href: "/map" },
-  { label: "Notifications", href: "/notifications" },
-  { label: "Users", href: "/users" },
-  { label: "Roles", href: "/roles" },
+  { label: "Dashboard", href: "/", feature: "Dashboard" },
+  { label: "Schedule", href: "/schedule", feature: "Schedule" },
+  { label: "Availability", href: "/availability", feature: "Schedule" },
+  { label: "Map", href: "/map", feature: "Schedule" },
+  { label: "Notifications", href: "/notifications", feature: "Notifications" },
+  { label: "Users", href: "/users", feature: "Users" },
+  { label: "Roles", href: "/roles", feature: "Users" },
 ];
 
 function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { user, hasPermission } = useAuth();
   
   const activeItem = useMemo(
     () => navigation.find((item) => item.href === router.pathname) ?? navigation[0],
@@ -67,7 +69,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
       <aside className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 fixed md:static inset-y-0 left-0 z-40 w-64 flex flex-col border-r border-white/10 bg-slate-950 px-6 py-8 text-slate-100 transition-transform duration-300`}>
         <div className="mb-12 text-2xl font-semibold tracking-tight cursor-default">Control Center</div>
         <nav className="flex flex-1 flex-col gap-1">
-          {navigation.map((item) => {
+          {navigation.filter(item => hasPermission(item.feature, 'viewOwn') || hasPermission(item.feature, 'viewGlobal')).map((item) => {
             const isActive = item.href === router.pathname;
             return (
               <Link
@@ -103,9 +105,9 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
 
       <main className="flex-1 bg-slate-100 md:ml-0">
         <div className="flex h-16 items-center justify-between border-b border-slate-200 bg-white px-8 pl-16 md:pl-8">
-          <span className="text-lg font-semibold text-slate-900">{activeItem.label}</span>
+          <span className="text-lg font-semibold text-slate-900">{activeItem?.label || 'Dashboard'}</span>
           <div className="flex items-center gap-3 text-sm text-slate-500">
-            <span>Welcome back</span>
+            <span>Welcome back {user?.firstName}</span>
             <button className="rounded-full bg-slate-900 px-4 py-2 text-white transition hover:bg-slate-700 cursor-pointer">
               Quick Action
             </button>

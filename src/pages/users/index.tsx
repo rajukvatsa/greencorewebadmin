@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useAuth } from "@/hooks/useAuth";
 
 interface User {
   _id: string;
@@ -15,6 +16,7 @@ export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const { hasPermission } = useAuth();
 
   useEffect(() => {
     fetchUsers();
@@ -58,12 +60,14 @@ export default function UsersPage() {
           <h1 className="text-2xl font-semibold text-slate-900">Users</h1>
           <p className="text-sm text-slate-500">Manage system users and their permissions</p>
         </div>
-        <Link
-          href="/users/add"
-          className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 cursor-pointer"
-        >
-          Add User
-        </Link>
+        {hasPermission('Users', 'create') && (
+          <Link
+            href="/users/add"
+            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 cursor-pointer"
+          >
+            Add User
+          </Link>
+        )}
       </div>
 
       <div className="overflow-hidden rounded-lg border border-slate-200 bg-white">
@@ -118,18 +122,22 @@ export default function UsersPage() {
                   </span>
                 </td>
                 <td className="px-6 py-4 text-right text-sm">
-                  <Link
-                    href={`/users/edit/${user._id}`}
-                    className="mr-2 text-slate-600 hover:text-slate-900 cursor-pointer"
-                  >
-                    Edit
-                  </Link>
-                  <button
-                    onClick={() => handleDelete(user._id)}
-                    className="text-red-600 hover:text-red-900 cursor-pointer"
-                  >
-                    Delete
-                  </button>
+                  {hasPermission('Users', 'edit') && (
+                    <Link
+                      href={`/users/edit/${user._id}`}
+                      className="mr-2 text-slate-600 hover:text-slate-900 cursor-pointer"
+                    >
+                      Edit
+                    </Link>
+                  )}
+                  {hasPermission('Users', 'delete') && (
+                    <button
+                      onClick={() => handleDelete(user._id)}
+                      className="text-red-600 hover:text-red-900 cursor-pointer"
+                    >
+                      Delete
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}
