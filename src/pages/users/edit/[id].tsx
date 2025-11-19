@@ -87,7 +87,7 @@ export default function EditUserPage() {
   const handleRoleChange = (roleId: string) => {
     const role = roles.find(r => r._id === roleId);
     setSelectedRole(role || null);
-    if (role && !formData.permissions || Object.keys(formData.permissions).length === 0) {
+    if (role && (!formData.permissions || Object.keys(formData.permissions).length === 0)) {
       setFormData({ ...formData, role: roleId, permissions: { ...role.features } });
     } else {
       setFormData({ ...formData, role: roleId });
