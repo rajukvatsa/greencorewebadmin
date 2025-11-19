@@ -143,7 +143,7 @@ export default function CreditsPage() {
                 <div className="mt-6 p-4 bg-slate-50 rounded-lg">
                   <div className="text-sm text-slate-600">Current Balance</div>
                   <div className={`text-2xl font-bold ${walletData.balance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                    ${walletData.balance.toFixed(2)}
+                    €{walletData.balance.toFixed(2)}
                   </div>
                 </div>
               )}
@@ -203,7 +203,7 @@ export default function CreditsPage() {
                       <td className={`px-6 py-4 text-sm font-medium ${
                         credit.type === 'deposit' ? 'text-green-600' : 'text-red-600'
                       }`}>
-                        {credit.type === 'deposit' ? '+' : '-'}${credit.amount.toFixed(2)}
+                        {credit.type === 'deposit' ? '+' : '-'}€{credit.amount.toFixed(2)}
                       </td>
                       <td className="px-6 py-4 text-sm text-slate-900">{credit.description}</td>
                       <td className="px-6 py-4 text-sm text-slate-500">
