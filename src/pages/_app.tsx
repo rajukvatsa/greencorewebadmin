@@ -18,10 +18,14 @@ const geistMono = Geist_Mono({
 
 const navigation = [
   { label: "Dashboard", href: "/", feature: "Dashboard" },
-  { label: "Schedule", href: "/schedule", feature: "Schedule" },
-  { label: "Availability", href: "/availability", feature: "Schedule" },
-  { label: "Map", href: "/map", feature: "Schedule" },
-  { label: "Notifications", href: "/notifications", feature: "Notifications" },
+  { label: "Client", href: "/schedule", feature: "Schedule" },
+  { label: "Bookings", href: "/availability", feature: "Schedule" },
+  { label: "Credit", href: "/map", feature: "Schedule" },
+  { label: "Reports", href: "/reports", feature: "Reports" },
+   { label: "Document Manager", href: "/settings", feature: "Schedule" },
+  { label: "Staff", href: "/notifications", feature: "Notifications" },
+   { label: "Leave Manager", href: "/settings", feature: "Schedule" },
+    { label: "Settings", href: "/settings", feature: "Schedule" },
   { label: "Users", href: "/users", feature: "Users" },
   { label: "Roles", href: "/roles", feature: "Users" },
 ];
