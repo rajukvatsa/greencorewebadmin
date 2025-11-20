@@ -34,12 +34,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const { user, hasPermission } = useAuth();
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
   
   const activeItem = useMemo(
     () => navigation.find((item) => item.href === router.pathname) ?? navigation[0],
@@ -60,7 +55,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
     router.push("/login");
   };
 
-  if (!mounted || (!isLoggedIn && router.pathname !== "/login")) {
+  if (!isLoggedIn && router.pathname !== "/login") {
     return <div>Loading...</div>;
   }
 
