@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { MongoClient, ObjectId } from 'mongodb';
-
-const client = new MongoClient(process.env.MONGODB_URI || 'mongodb://localhost:27017/dashboard');
+import { ObjectId } from 'mongodb';
+import { connectToDatabase } from '@/lib/mongodb';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET') {
@@ -10,8 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   
   const { clientId } = req.query;
   
-  await client.connect();
-  const db = client.db();
+  const { db } = await connectToDatabase();
   const credits = db.collection('credits');
   
   const transactions = await credits.aggregate([

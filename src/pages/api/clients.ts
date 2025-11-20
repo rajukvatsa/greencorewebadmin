@@ -1,19 +1,16 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { MongoClient, ObjectId } from 'mongodb';
-
-const client = new MongoClient(process.env.MONGODB_URI || 'mongodb://localhost:27017/dashboard');
+import { ObjectId } from 'mongodb';
+import { connectToDatabase } from '@/lib/mongodb';
 
 async function getClients(req: NextApiRequest, res: NextApiResponse) {
-  await client.connect();
-  const db = client.db();
+  const { db } = await connectToDatabase();
   const clients = db.collection('clients');
   const result = await clients.find({}).toArray();
   res.json(result);
 }
 
 async function createClient(req: NextApiRequest, res: NextApiResponse) {
-  await client.connect();
-  const db = client.db();
+  const { db } = await connectToDatabase();
   const clients = db.collection('clients');
   
   const { name, vatNumber, phone, email } = req.body;
@@ -26,8 +23,7 @@ async function createClient(req: NextApiRequest, res: NextApiResponse) {
 }
 
 async function updateClient(req: NextApiRequest, res: NextApiResponse) {
-  await client.connect();
-  const db = client.db();
+  const { db } = await connectToDatabase();
   const clients = db.collection('clients');
   
   const { id, ...updateData } = req.body;
@@ -44,8 +40,7 @@ async function updateClient(req: NextApiRequest, res: NextApiResponse) {
 }
 
 async function deleteClient(req: NextApiRequest, res: NextApiResponse) {
-  await client.connect();
-  const db = client.db();
+  const { db } = await connectToDatabase();
   const clients = db.collection('clients');
   
   const { id } = req.body;
