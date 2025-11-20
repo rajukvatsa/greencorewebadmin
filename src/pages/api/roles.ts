@@ -1,26 +1,6 @@
-import { MongoClient, Db, ObjectId } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import type { NextApiRequest, NextApiResponse } from 'next';
-
-const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017';
-const dbName = process.env.DB_NAME || 'dashboard';
-
-let cachedClient: MongoClient | null = null;
-let cachedDb: Db | null = null;
-
-async function connectToDatabase() {
-  if (cachedClient && cachedDb) {
-    return { client: cachedClient, db: cachedDb };
-  }
-
-  const client = new MongoClient(uri);
-  await client.connect();
-  const db = client.db(dbName);
-
-  cachedClient = client;
-  cachedDb = db;
-
-  return { client, db };
-}
+import { connectToDatabase } from '@/lib/mongodb';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { db } = await connectToDatabase();
