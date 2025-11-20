@@ -1,11 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { MongoClient, ObjectId } from 'mongodb';
-
-const client = new MongoClient(process.env.MONGODB_URI || 'mongodb://localhost:27017/dashboard');
+import { ObjectId } from 'mongodb';
+import { connectToDatabase } from '@/lib/mongodb';
 
 async function getUsers(req: NextApiRequest, res: NextApiResponse) {
-  await client.connect();
-  const db = client.db();
+  const { db } = await connectToDatabase();
   const users = db.collection('users');
   const result = await users.aggregate([
     {
@@ -26,8 +24,7 @@ async function getUsers(req: NextApiRequest, res: NextApiResponse) {
 }
 
 async function createUser(req: NextApiRequest, res: NextApiResponse) {
-  await client.connect();
-  const db = client.db();
+  const { db } = await connectToDatabase();
   const users = db.collection('users');
   
   const { firstName, lastName, email, password } = req.body;
@@ -50,8 +47,7 @@ async function createUser(req: NextApiRequest, res: NextApiResponse) {
 }
 
 async function updateUser(req: NextApiRequest, res: NextApiResponse) {
-  await client.connect();
-  const db = client.db();
+  const { db } = await connectToDatabase();
   const users = db.collection('users');
   
   const { id, ...updateData } = req.body;
@@ -76,8 +72,7 @@ async function updateUser(req: NextApiRequest, res: NextApiResponse) {
 }
 
 async function deleteUser(req: NextApiRequest, res: NextApiResponse) {
-  await client.connect();
-  const db = client.db();
+  const { db } = await connectToDatabase();
   const users = db.collection('users');
   
   const { id } = req.body;
